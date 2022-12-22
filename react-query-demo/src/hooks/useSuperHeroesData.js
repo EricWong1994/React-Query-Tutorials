@@ -9,8 +9,13 @@ const fetchSuperHeroes = () => {
 
 export const useSuperHeroesData = (onSuccess, onError) => {
   return useQuery('super-heroes', fetchSuperHeroes, {
+    // cacheTime: 5000, // 查询缓存时间（默认5分钟)，该时间段内再次请求，isLoading依然为false，只有isFetching会变化
+    staleTime: 30000, // 陈旧时间(默认为0),30s后状态由fresh变为stale，在这30s之内，再次切换到RQ Super Heroes，不会发起网络请求
+    // refetchOnMount: false,
+    // refetchOnWindowFocus: false,
+    // refetchOnWindowFocus: 'always',
     onSuccess,
-    onError
+    onError,
     // select: data => {
     //   const superHeroNames = data.data.map(hero => hero.name)
     //   return superHeroNames
@@ -50,8 +55,8 @@ export const useAddSuperHeroData = () => {
           ...oldQueryData,
           data: [
             ...oldQueryData.data,
-            { id: oldQueryData?.data?.length + 1, ...newHero }
-          ]
+            { id: oldQueryData?.data?.length + 1, ...newHero },
+          ],
         }
       })
       return { previousHeroData }
@@ -61,7 +66,7 @@ export const useAddSuperHeroData = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries('super-heroes')
-    }
+    },
     /**Optimistic Update End */
   })
 }

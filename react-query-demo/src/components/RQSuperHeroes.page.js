@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {
   useAddSuperHeroData,
-  useSuperHeroesData
+  useSuperHeroesData,
 } from '../hooks/useSuperHeroesData'
 import { Link } from 'react-router-dom'
 
@@ -10,17 +10,16 @@ export const RQSuperHeroesPage = () => {
   const [alterEgo, setAlterEgo] = useState('')
 
   const onSuccess = data => {
-    console.log({ data })
+    console.log('onSuccess data', { data })
   }
 
   const onError = error => {
     console.log({ error })
   }
 
-  const { isLoading, data, isError, error, refetch } = useSuperHeroesData(
-    onSuccess,
-    onError
-  )
+  const { isLoading, data, isError, error, refetch, isFetching } =
+    useSuperHeroesData(onSuccess, onError)
+  console.log({ isLoading, isFetching })
 
   const { mutate: addHero } = useAddSuperHeroData()
 
